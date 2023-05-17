@@ -81,7 +81,7 @@ async function run() {
     });
 
     // review aoi
-    app.get("/orders", async (req, res) => {
+    app.get("/reviews", async (req, res) => {
       let query = {};
       if (req.query.title) {
         query = {
@@ -92,6 +92,13 @@ async function run() {
       const reviews = await cursor.toArray();
       res.send(reviews);
       // console.log(orders);
+    });
+
+    // for get reviews for client side
+    app.post("/reviews", async (req, res) => {
+      const review = req.body;
+      const result = await reviewCollection.insertOne(review);
+      res.send(result);
     });
   } finally {
   }
