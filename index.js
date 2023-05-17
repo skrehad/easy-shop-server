@@ -25,6 +25,7 @@ async function run() {
     const productCollection = client.db("easyShop").collection("products");
     const blogCollection = client.db("easyShop").collection("blogs");
     const orderCollection = client.db("easyShop").collection("orders");
+    const reviewCollection = client.db("easyShop").collection("reviews");
 
     // for get all products
     app.get("/products", async (req, res) => {
@@ -77,6 +78,20 @@ async function run() {
       const query = { _id: new ObjectId(id) };
       const result = await orderCollection.deleteOne(query);
       res.send(result);
+    });
+
+    // review aoi
+    app.get("/orders", async (req, res) => {
+      let query = {};
+      if (req.query.title) {
+        query = {
+          title: req.query.title,
+        };
+      }
+      const cursor = reviewCollection.find(query);
+      const reviews = await cursor.toArray();
+      res.send(reviews);
+      // console.log(orders);
     });
   } finally {
   }
