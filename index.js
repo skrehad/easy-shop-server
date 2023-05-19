@@ -23,6 +23,10 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     const productCollection = client.db("easyShop").collection("products");
+    const homeCollection = client.db("easyShop").collection("homeProducts");
+    const topSellingCollection = client
+      .db("easyShop")
+      .collection("topSellingProducts");
     const blogCollection = client.db("easyShop").collection("blogs");
     const orderCollection = client.db("easyShop").collection("orders");
     const reviewCollection = client.db("easyShop").collection("reviews");
@@ -41,6 +45,22 @@ async function run() {
       const cursor = blogCollection.find(query);
       const blogs = await cursor.toArray();
       res.send(blogs);
+    });
+
+    // for get homeCollection
+    app.get("/homeProducts", async (req, res) => {
+      const query = {};
+      const cursor = homeCollection.find(query);
+      const homeProducts = await cursor.toArray();
+      res.send(homeProducts);
+    });
+
+    // for get top selling Collection
+    app.get("/topSellingProducts", async (req, res) => {
+      const query = {};
+      const cursor = topSellingCollection.find(query);
+      const topSellingProducts = await cursor.toArray();
+      res.send(topSellingProducts);
     });
 
     // for get single data details
