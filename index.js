@@ -22,32 +22,19 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    const productCollection = client.db("easyShop").collection("products");
     const homeCollection = client.db("easyShop").collection("homeProducts");
     const topSellingCollection = client
       .db("easyShop")
       .collection("topSellingProducts");
-    const blogCollection = client.db("easyShop").collection("blogs");
+    const allReviewCollection = client
+      .db("easyShop")
+      .collection("overAllReview");
+    const productCollection = client.db("easyShop").collection("products");
     const orderCollection = client.db("easyShop").collection("orders");
     const reviewCollection = client.db("easyShop").collection("reviews");
+    const blogCollection = client.db("easyShop").collection("blogs");
 
-    // for get all products
-    app.get("/products", async (req, res) => {
-      const query = {};
-      const cursor = productCollection.find(query);
-      const products = await cursor.toArray();
-      res.send(products);
-    });
-
-    // for get all blogs
-    app.get("/blogs", async (req, res) => {
-      const query = {};
-      const cursor = blogCollection.find(query);
-      const blogs = await cursor.toArray();
-      res.send(blogs);
-    });
-
-    // for get homeCollection
+    // for get homeCollection for client side
     app.get("/homeProducts", async (req, res) => {
       const query = {};
       const cursor = homeCollection.find(query);
@@ -55,7 +42,7 @@ async function run() {
       res.send(homeProducts);
     });
 
-    // for get top selling Collection
+    // for get top selling Collection for client side
     app.get("/topSellingProducts", async (req, res) => {
       const query = {};
       const cursor = topSellingCollection.find(query);
@@ -63,7 +50,30 @@ async function run() {
       res.send(topSellingProducts);
     });
 
-    // for get single data details
+    // receive allReviews data from client side
+    app.post("/overAllReview", async (req, res) => {
+      const review = req.body;
+      const result = await allReviewCollection.insertOne(review);
+      res.send(result);
+    });
+
+    // get api from backend for client side
+    app.get("/overAllReview", async (req, res) => {
+      const query = {};
+      const cursor = allReviewCollection.find(query);
+      const allReviewCollections = await cursor.toArray();
+      res.send(allReviewCollections);
+    });
+
+    // for get all products for client side
+    app.get("/products", async (req, res) => {
+      const query = {};
+      const cursor = productCollection.find(query);
+      const products = await cursor.toArray();
+      res.send(products);
+    });
+
+    // for get single data details for client side
     app.get("/products/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
@@ -71,7 +81,7 @@ async function run() {
       res.send(products);
     });
 
-    // orders api
+    // get api from backend for client side
     app.get("/orders", async (req, res) => {
       let query = {};
       if (req.query.email) {
@@ -85,7 +95,7 @@ async function run() {
       // console.log(orders);
     });
 
-    // for get oder for client side
+    // receive oder data from client side
     app.post("/orders", async (req, res) => {
       const order = req.body;
       const result = await orderCollection.insertOne(order);
@@ -100,7 +110,7 @@ async function run() {
       res.send(result);
     });
 
-    // review aoi
+    // get api from backend for client side
     app.get("/reviews", async (req, res) => {
       let query = {};
       if (req.query.title) {
@@ -114,11 +124,19 @@ async function run() {
       // console.log(orders);
     });
 
-    // for get reviews for client side
+    // receive  reviews data from client side
     app.post("/reviews", async (req, res) => {
       const review = req.body;
       const result = await reviewCollection.insertOne(review);
       res.send(result);
+    });
+
+    // for get all blogs for client side
+    app.get("/blogs", async (req, res) => {
+      const query = {};
+      const cursor = blogCollection.find(query);
+      const blogs = await cursor.toArray();
+      res.send(blogs);
     });
   } finally {
   }
