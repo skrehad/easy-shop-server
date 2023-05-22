@@ -18,11 +18,10 @@ const client = new MongoClient(uri, {
     deprecationErrors: true,
   },
 });
-// console.log(uri);
 
 async function run() {
   try {
-    const homeCollection = client.db("easyShop").collection("homeProducts");
+    // const homeCollection = client.db("easyShop").collection("homeProducts");
     const topSellingCollection = client
       .db("easyShop")
       .collection("topSellingProducts");
@@ -34,20 +33,12 @@ async function run() {
     const reviewCollection = client.db("easyShop").collection("reviews");
     const blogCollection = client.db("easyShop").collection("blogs");
 
-    // for get homeCollection for client side
-    app.get("/homeProducts", async (req, res) => {
-      const query = {};
-      const cursor = homeCollection.find(query);
-      const homeProducts = await cursor.toArray();
-      res.send(homeProducts);
-    });
-
     // for get top selling Collection for client side
     app.get("/topSellingProducts", async (req, res) => {
       const query = {};
       const cursor = topSellingCollection.find(query);
-      const topSellingProducts = await cursor.toArray();
-      res.send(topSellingProducts);
+      const topSellingProduct = await cursor.toArray();
+      res.send(topSellingProduct);
     });
 
     // receive allReviews data from client side
@@ -61,8 +52,8 @@ async function run() {
     app.get("/overAllReview", async (req, res) => {
       const query = {};
       const cursor = allReviewCollection.find(query);
-      const allReviewCollections = await cursor.toArray();
-      res.send(allReviewCollections);
+      const allReview = await cursor.toArray();
+      res.send(allReview);
     });
 
     // for get all products for client side
